@@ -1,0 +1,58 @@
+--- # create docker file
+- hosts: demo
+  user: ansadmin
+  become: yes
+  connection: ssh
+  gather_facts: yes
+
+  vars:
+     directory: /root/Downloads/susanta
+
+  tasks:
+         - name: mkdir /home/ansadmin/susanta
+           file: path=/home/ansadmin/susanta state=directory
+           register: rpm_files
+
+         - name: copy PRMs to /tmp/RPMS
+           copy:
+                src: "{{ item }}" 
+                dest: /home/ansadmin/susanta
+           register: rpms_copied
+        
+                     
+
+           with_fileglob:
+                - '{{directory}}/*'
+
+         - name: Remove container
+           docker_container:
+             name: nginx_container
+             state: absent
+
+         - name: Remove image
+           docker_image:
+            state: absent
+            name: nginx_image
+
+         - name: Build Docker image from Dockerfile
+           docker_image:
+            name: nginx_image
+            build:
+             pull: yes
+             path: ./susanta
+            state: present
+            #push: yes
+            source: build
+
+         
+         - name: launch docker container
+           docker_container:
+            name:  nginx_container
+            image: nginx_image
+            state: started
+            ports:
+              - "8080:80"
+             
+           register: docker_info
+        
+        
