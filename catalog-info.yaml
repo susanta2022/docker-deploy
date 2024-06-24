@@ -3,6 +3,8 @@ kind: Resource
 metadata:
   name: docker-deploy
   description: Stores artist details
+  annotations:
+    github.com/project-slug: susanta2022/docker-deploy
 spec:
   type: database
   owner: susanta
