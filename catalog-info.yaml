@@ -2,9 +2,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
   name: docker-deploy
-  annotations:
-    github.com/project-slug: susanta2022/docker-deploy
+  description: Stores artist details
 spec:
-  type: other
-  lifecycle: unknown
+  type: database
   owner: susanta
+  system: artist-engagement-portal
